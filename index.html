@@ -7,6 +7,31 @@
     <title>Weekly Music Theory Quiz</title>
 
     <style>
+        .panel {
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .panel-header {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            background: #f5f5f5;
+            user-select: none;
+
+        }
+
+        .panel-content {
+            display: none;
+            padding: 1rem;
+        }
+
+        .panel-content img {
+            max-width: 100%;
+            display: block;
+        }
+
         :root {
             --bg: #0f172a;
             --card: #111827;
@@ -105,8 +130,55 @@
     <div class="container">
 
         <header>
-            <h1 id="title"></h1>
+            <h2 id="title"></h2>
         </header>
+
+        <div class="panel">
+            <div class="panel-header" onclick="togglePanelCircle()">
+                Circle of fifths
+            </div>
+
+            <div class="panel-content" id="panelCircle">
+                <img src="https://piano-music-theory.com/wp-content/uploads/2016/06/circle-of-fifths.png"
+                    alt="Panel image">
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header" onclick="togglePanelTasks()">
+                Practice List
+            </div>
+
+            <div class="panel-content" id="panelTasks">
+                <section>
+                    <h3>Reading & Awareness</h3>
+                    <ul>
+                        <li>Sight-reading (hands separate → together)</li>
+                        <li>Primary chords: I, IV, V</li>
+                        <li>Scale (parallel & contrary motion)</li>
+                        <li>Arpeggios (root position + inversions)</li>
+                        <li>Broken chords / patterns</li>
+                        <li>Double thirds</li>
+                        <li>Sixths</li>
+                        <li>Octaves (optional)</li>
+                        <li>Triads in all inversions</li>
+                        <li>Seventh chords</li>
+                        <li>Basic cadences:
+                            <ul>
+                                <li>I–V–I</li>
+                                <li>I–IV–V–I</li>
+                                <li>ii–V–I</li>
+                            </ul>
+                        </li>
+                        <li>Short improvisation (stay strictly in key)</li>
+                        <li>Transpose a simple pattern into this key</li>
+                        <li>Excerpt from a piece in this key</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+
 
         <main id="questions"></main>
 
@@ -119,27 +191,6 @@
     <script>
         const data = {
             major: {
-                "C Major": [
-                    { "question": "How many sharps or flats are in C major?", "answer": "None." },
-                    { "question": "What is the relative minor of C major?", "answer": "A minor." },
-                    { "question": "What notes are in the C major scale?", "answer": "C D E F G A B" },
-                    { "question": "What is the C major scale in ascending order?", "answer": "C D E F G A B C" },
-                    { "question": "What is the C major scale in descending order?", "answer": "C B A G F E D C" },
-                    { "question": "What is the parallel minor of C major?", "answer": "C minor." },
-                    { "question": "What is the tonic chord of C major?", "answer": "C major (C E G)" },
-                    { "question": "What is the dominant chord of C major?", "answer": "G major (G B D)" },
-                    { "question": "What is the subdominant chord of C major?", "answer": "F major (F A C)" },
-                    { "question": "What is the key signature of C major?", "answer": "No sharps or flats." },
-                    { "question": "What is the first degree (tonic) of C major?", "answer": "C" },
-                    { "question": "What is the second degree (supertonic) of C major?", "answer": "D" },
-                    { "question": "What is the third degree (mediant) of C major?", "answer": "E" },
-                    { "question": "What is the fourth degree (subdominant) of C major?", "answer": "F" },
-                    { "question": "What is the fifth degree (dominant) of C major?", "answer": "G" },
-                    { "question": "What is the sixth degree (submediant) of C major?", "answer": "A" },
-                    { "question": "What is the seventh degree (leading tone) of C major?", "answer": "B" },
-                    { "question": "Which chords in C major are minor?", "answer": "D minor, E minor, A minor" },
-                    { "question": "Which chord in C major is diminished?", "answer": "B diminished" }
-                ],
                 "G Major": [
                     { "question": "How many sharps or flats are in G major?", "answer": "1 sharp (F#)." },
                     { "question": "What is the relative minor of G major?", "answer": "E minor." },
@@ -337,30 +388,30 @@
                     { "question": "What is the B harmonic minor scale in ascending order?", "answer": "B C# D E F# G A# B" },
                     { "question": "What is the B harmonic minor scale in descending order?", "answer": "B A# G F# E D C# B" }
                 ],
-                "G Minor": [
-                    { "question": "How many sharps or flats are in G minor?", "answer": "2 flats (B♭ and E♭)." },
-                    { "question": "What is the relative major of G minor?", "answer": "B♭ major." },
-                    { "question": "What notes are in the G natural minor scale?", "answer": "G A B♭ C D E♭ F" },
-                    { "question": "What is the G natural minor scale in ascending order?", "answer": "G A B♭ C D E♭ F G" },
-                    { "question": "What is the G natural minor scale in descending order?", "answer": "G F E♭ D C B♭ A G" },
-                    { "question": "What is the parallel major of G minor?", "answer": "G major." },
-                    { "question": "What is the tonic chord of G minor?", "answer": "G minor (G B♭ D)" },
-                    { "question": "What is the dominant chord of G minor?", "answer": "D minor (D F A) in natural minor, D major (D F# A) in harmonic minor" },
-                    { "question": "What is the subdominant chord of G minor?", "answer": "C minor (C E♭ G)" },
-                    { "question": "What is the first degree (tonic) of G minor?", "answer": "G" },
-                    { "question": "What is the second degree (supertonic) of G minor?", "answer": "A" },
-                    { "question": "What is the third degree (mediant) of G minor?", "answer": "B♭" },
-                    { "question": "What is the fourth degree (subdominant) of G minor?", "answer": "C" },
-                    { "question": "What is the fifth degree (dominant) of G minor?", "answer": "D" },
-                    { "question": "What is the sixth degree (submediant) of G minor?", "answer": "E♭" },
-                    { "question": "What is the seventh degree (subtonic) of G natural minor?", "answer": "F" },
-                    { "question": "What is the seventh degree (leading tone) of G harmonic minor?", "answer": "F#" },
-                    { "question": "Which chords in G minor are minor?", "answer": "G minor, A diminished, C minor" },
-                    { "question": "Which chord in G minor is major?", "answer": "B♭ major, D major (in harmonic minor), E♭ major" },
-                    { "question": "Which chord in G minor is diminished?", "answer": "F# diminished (harmonic minor) or A diminished (natural minor)" },
-                    { "question": "What are the notes in the G harmonic minor scale?", "answer": "G A B♭ C D E♭ F#" },
-                    { "question": "What is the G harmonic minor scale in ascending order?", "answer": "G A B♭ C D E♭ F# G" },
-                    { "question": "What is the G harmonic minor scale in descending order?", "answer": "G F# E♭ D C B♭ A G" }
+                "F# Minor": [
+                    { "question": "How many sharps or flats are in F# minor?", "answer": "3 sharps (F♯, C♯, G♯)." },
+                    { "question": "What is the relative major of F# minor?", "answer": "A major." },
+                    { "question": "What notes are in the F# natural minor scale?", "answer": "F♯ G♯ A B C♯ D E" },
+                    { "question": "What is the F# natural minor scale in ascending order?", "answer": "F♯ G♯ A B C♯ D E F♯" },
+                    { "question": "What is the F# natural minor scale in descending order?", "answer": "F♯ E D C♯ B A G♯ F♯" },
+                    { "question": "What is the parallel major of F# minor?", "answer": "F♯ major." },
+                    { "question": "What is the tonic chord of F# minor?", "answer": "F♯ minor (F♯ A C♯)" },
+                    { "question": "What is the dominant chord of F# minor?", "answer": "C♯ minor (C♯ E G♯) in natural minor, C♯ major (C♯ E♯ G♯) in harmonic minor" },
+                    { "question": "What is the subdominant chord of F# minor?", "answer": "B minor (B D F♯)" },
+                    { "question": "What is the first degree (tonic) of F# minor?", "answer": "F♯" },
+                    { "question": "What is the second degree (supertonic) of F# minor?", "answer": "G♯" },
+                    { "question": "What is the third degree (mediant) of F# minor?", "answer": "A" },
+                    { "question": "What is the fourth degree (subdominant) of F# minor?", "answer": "B" },
+                    { "question": "What is the fifth degree (dominant) of F# minor?", "answer": "C♯" },
+                    { "question": "What is the sixth degree (submediant) of F# minor?", "answer": "D" },
+                    { "question": "What is the seventh degree (subtonic) of F# natural minor?", "answer": "E" },
+                    { "question": "What is the seventh degree (leading tone) of F# harmonic minor?", "answer": "E♯" },
+                    { "question": "Which chords in F# minor are minor?", "answer": "F♯ minor, B minor, C♯ minor" },
+                    { "question": "Which chord in F# minor is major?", "answer": "A major, D major, C♯ major (in harmonic minor)" },
+                    { "question": "Which chord in F# minor is diminished?", "answer": "G♯ diminished (natural minor) or E♯ diminished (harmonic minor)" },
+                    { "question": "What are the notes in the F# harmonic minor scale?", "answer": "F♯ G♯ A B C♯ D E♯" },
+                    { "question": "What is the F# harmonic minor scale in ascending order?", "answer": "F♯ G♯ A B C♯ D E♯ F♯" },
+                    { "question": "What is the F# harmonic minor scale in descending order?", "answer": "F♯ E♯ D C♯ B A G♯ F♯" }
                 ],
                 "D Minor": [
                     { "question": "How many sharps or flats are in D minor?", "answer": "1 flat (B♭)." },
@@ -387,6 +438,31 @@
                     { "question": "What is the D harmonic minor scale in ascending order?", "answer": "D E F G A B♭ C# D" },
                     { "question": "What is the D harmonic minor scale in descending order?", "answer": "D C# B♭ A G F E D" }
                 ],
+                "G Minor": [
+                    { "question": "How many sharps or flats are in G minor?", "answer": "2 flats (B♭ and E♭)." },
+                    { "question": "What is the relative major of G minor?", "answer": "B♭ major." },
+                    { "question": "What notes are in the G natural minor scale?", "answer": "G A B♭ C D E♭ F" },
+                    { "question": "What is the G natural minor scale in ascending order?", "answer": "G A B♭ C D E♭ F G" },
+                    { "question": "What is the G natural minor scale in descending order?", "answer": "G F E♭ D C B♭ A G" },
+                    { "question": "What is the parallel major of G minor?", "answer": "G major." },
+                    { "question": "What is the tonic chord of G minor?", "answer": "G minor (G B♭ D)" },
+                    { "question": "What is the dominant chord of G minor?", "answer": "D minor (D F A) in natural minor, D major (D F# A) in harmonic minor" },
+                    { "question": "What is the subdominant chord of G minor?", "answer": "C minor (C E♭ G)" },
+                    { "question": "What is the first degree (tonic) of G minor?", "answer": "G" },
+                    { "question": "What is the second degree (supertonic) of G minor?", "answer": "A" },
+                    { "question": "What is the third degree (mediant) of G minor?", "answer": "B♭" },
+                    { "question": "What is the fourth degree (subdominant) of G minor?", "answer": "C" },
+                    { "question": "What is the fifth degree (dominant) of G minor?", "answer": "D" },
+                    { "question": "What is the sixth degree (submediant) of G minor?", "answer": "E♭" },
+                    { "question": "What is the seventh degree (subtonic) of G natural minor?", "answer": "F" },
+                    { "question": "What is the seventh degree (leading tone) of G harmonic minor?", "answer": "F#" },
+                    { "question": "Which chords in G minor are minor?", "answer": "G minor, A diminished, C minor" },
+                    { "question": "Which chord in G minor is major?", "answer": "B♭ major, D major (in harmonic minor), E♭ major" },
+                    { "question": "Which chord in G minor is diminished?", "answer": "F# diminished (harmonic minor) or A diminished (natural minor)" },
+                    { "question": "What are the notes in the G harmonic minor scale?", "answer": "G A B♭ C D E♭ F#" },
+                    { "question": "What is the G harmonic minor scale in ascending order?", "answer": "G A B♭ C D E♭ F# G" },
+                    { "question": "What is the G harmonic minor scale in descending order?", "answer": "G F# E♭ D C B♭ A G" }
+                ],
                 "C Minor": [
                     { "question": "How many sharps or flats are in C minor?", "answer": "3 flats (B♭, E♭, A♭)." },
                     { "question": "What is the relative major of C minor?", "answer": "E♭ major." },
@@ -412,33 +488,21 @@
                     { "question": "What is the C harmonic minor scale in ascending order?", "answer": "C D E♭ F G A♭ B C" },
                     { "question": "What is the C harmonic minor scale in descending order?", "answer": "C B A♭ G F E♭ D C" },
                 ],
-                "F# Minor": [
-                    { "question": "How many sharps or flats are in F# minor?", "answer": "3 sharps (F♯, C♯, G♯)." },
-                    { "question": "What is the relative major of F# minor?", "answer": "A major." },
-                    { "question": "What notes are in the F# natural minor scale?", "answer": "F♯ G♯ A B C♯ D E" },
-                    { "question": "What is the F# natural minor scale in ascending order?", "answer": "F♯ G♯ A B C♯ D E F♯" },
-                    { "question": "What is the F# natural minor scale in descending order?", "answer": "F♯ E D C♯ B A G♯ F♯" },
-                    { "question": "What is the parallel major of F# minor?", "answer": "F♯ major." },
-                    { "question": "What is the tonic chord of F# minor?", "answer": "F♯ minor (F♯ A C♯)" },
-                    { "question": "What is the dominant chord of F# minor?", "answer": "C♯ minor (C♯ E G♯) in natural minor, C♯ major (C♯ E♯ G♯) in harmonic minor" },
-                    { "question": "What is the subdominant chord of F# minor?", "answer": "B minor (B D F♯)" },
-                    { "question": "What is the first degree (tonic) of F# minor?", "answer": "F♯" },
-                    { "question": "What is the second degree (supertonic) of F# minor?", "answer": "G♯" },
-                    { "question": "What is the third degree (mediant) of F# minor?", "answer": "A" },
-                    { "question": "What is the fourth degree (subdominant) of F# minor?", "answer": "B" },
-                    { "question": "What is the fifth degree (dominant) of F# minor?", "answer": "C♯" },
-                    { "question": "What is the sixth degree (submediant) of F# minor?", "answer": "D" },
-                    { "question": "What is the seventh degree (subtonic) of F# natural minor?", "answer": "E" },
-                    { "question": "What is the seventh degree (leading tone) of F# harmonic minor?", "answer": "E♯" },
-                    { "question": "Which chords in F# minor are minor?", "answer": "F♯ minor, B minor, C♯ minor" },
-                    { "question": "Which chord in F# minor is major?", "answer": "A major, D major, C♯ major (in harmonic minor)" },
-                    { "question": "Which chord in F# minor is diminished?", "answer": "G♯ diminished (natural minor) or E♯ diminished (harmonic minor)" },
-                    { "question": "What are the notes in the F# harmonic minor scale?", "answer": "F♯ G♯ A B C♯ D E♯" },
-                    { "question": "What is the F# harmonic minor scale in ascending order?", "answer": "F♯ G♯ A B C♯ D E♯ F♯" },
-                    { "question": "What is the F# harmonic minor scale in descending order?", "answer": "F♯ E♯ D C♯ B A G♯ F♯" }
-                ]
+
             }
         };
+
+        function togglePanelCircle() {
+            const content = document.getElementById("panelCircle");
+            content.style.display =
+                content.style.display === "block" ? "none" : "block";
+        }
+
+        function togglePanelTasks() {
+            const content = document.getElementById("panelTasks");
+            content.style.display =
+                content.style.display === "block" ? "none" : "block";
+        }
 
         function getWeekNumber(date) {
             const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -456,11 +520,16 @@
         }
 
         // Override
-        // const week = 51;
+        //const week = 7;
         const week = getWeekNumber(new Date());
         const mode = week % 2 === 0 ? "minor" : "major";
         const keys = Object.keys(data[mode]);
         const selectedKey = keys[week % keys.length];
+
+        const nextWeek = getWeekNumber(new Date()) + 1;
+        const nextMode = nextWeek % 2 === 0 ? "minor" : "major";
+        const nextKeys = Object.keys(data[nextMode]);
+        const nextSelectedKey = nextKeys[nextWeek % nextKeys.length];
 
         // Calculate days until next ISO week (Monday)
         const now = new Date();
@@ -480,8 +549,8 @@
         const footerContent = `
             Week number: ${week} <br>
             Mode: ${mode} <br>
-            Available keys: ${keys.join(", ")} <br>
             Selected key: ${selectedKey} 🎹 <br>
+            Next Week key: ${nextSelectedKey} 🎹 <br>
             Time until new key week: ${diffDays} day${diffDays !== 1 ? 's' : ''} and ${diffHours} hour${diffHours !== 1 ? 's' : ''}
             `;
 
@@ -491,7 +560,7 @@
             `Key of the Week (${mode}): ${selectedKey}`;
 
         const questions = [...data[mode][selectedKey]];
-        shuffle(questions);
+        // shuffle(questions);
 
         const container = document.getElementById("questions");
 
